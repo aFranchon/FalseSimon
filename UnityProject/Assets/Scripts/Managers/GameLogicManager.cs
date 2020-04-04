@@ -37,6 +37,14 @@ public class GameLogicManager : Singleton<GameLogicManager>
     #endregion
 
     #region Initilize Object
+    protected override void Awake()
+    {
+        base.Awake();
+
+        UIManager.Instance.playGameButton += PlayGameButton;
+        UIManager.Instance.clueButton += ClueButton;
+    }
+
     private void Start()
     {
         cubeBehaviour.onCubeClicked += onCubeClicked;
@@ -72,13 +80,6 @@ public class GameLogicManager : Singleton<GameLogicManager>
         StartCoroutine(ClearGame((float)numberOfCommands + 0.5f));
 
         onClueButtonClick?.Invoke();
-    }
-
-    public void RestartGameButton()
-    {
-        commandManager.ClearList();
-
-        onRestartButtonClick?.Invoke();
     }
 
     public IEnumerator ClearGame(float timeToWait)
@@ -118,6 +119,16 @@ public class GameLogicManager : Singleton<GameLogicManager>
     {
         index = 0;
         StartCoroutine(ClearGame(1f));
+    }
+    #endregion
+
+    #region Destroy Object
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        UIManager.Instance.playGameButton -= PlayGameButton;
+        UIManager.Instance.clueButton -= ClueButton;
     }
     #endregion
 }
